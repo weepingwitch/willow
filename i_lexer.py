@@ -127,6 +127,7 @@ class Lexer(object):
         # cast that string as a float
         return float(result)
 
+    # parse in something that is either a variable or a function
     def _id(self):
         result = ''
         while self.current_char is not None and self.current_char.isalnum():
@@ -134,117 +135,100 @@ class Lexer(object):
             self.advance()
 
         if self.verbose: print "id parsed: " + result
+        # chck to see if it s a reserved function, otherwise just return an ID
         token = RESERVED_KEYWORDS.get(result, Token(ID, result))
         return token
 
+    # read in the next token
     def get_next_token(self):
         while self.current_char is not None:
-
+            # handle comment skipping
             if self.current_char == "#":
                 self.advance()
                 self.skip_comment()
                 continue
-
+            # handle whitespace skipping
             if self.current_char.isspace():
                 self.skip_whitespace()
                 continue
-
+            # scan brackets (for variable substitution in strings)
             if self.current_char == "{":
                 self.advance()
                 return Token(LBRACKET, '{')
-
             if self.current_char == "}":
                 self.advance()
                 return Token(RBRACKET, '}')
-
+            # scan strings
             if self.current_char == '"' or self.current_char == "'":
                 return Token(STRING, self.lexSTRING(self.current_char))
-
+            # scan variables / function names
             if self.current_char.isalpha():
                 return self._id()
-
-
+            # scan arrays
             if self.current_char == '[':
                 return Token(ARRAY, self.lexARRAY())
-
+            # scan floats
             if self.current_char.isdigit():
                 return Token(FLOAT, self.lexFLOAT())
-
-
+            # scan single =, used for assignment
             if self.current_char == "=" and (self.peek() != "="):
                 self.advance()
                 return Token(ASSIGN, "=")
-
+            # scan ==, and other compairson operators
             elif self.current_char == "=" and (self.peek() == "="):
                 self.advance()
                 self.advance()
                 return Token(EQUALS, "==")
-
             if self.current_char == ">" and (self.peek() != "="):
                 self.advance()
                 return Token(GREATER, ">")
-
             elif self.current_char == ">" and (self.peek() == "="):
                 self.advance()
                 self.advance()
                 return Token(GREATEREQ, ">=")
-
             if self.current_char == "<" and (self.peek() != "="):
                 self.advance()
                 return Token(LESSER, "<")
-
             elif self.current_char == "<" and (self.peek() == "="):
                 self.advance()
                 self.advance()
                 return Token(LESSEREQ, "<=")
-
+            # scan a comma
             if self.current_char == ',':
                 self.advance()
                 return Token(COMMA, ',')
-
+            # scan a period, used to concat
             if self.current_char == '.':
                 self.advance()
                 return Token(CONCAT, '.')
-
-
+            # scan a semicolon, used to end statements
             if self.current_char == ";":
                 self.advance()
                 return Token(SEMI, ';')
-
+            #scan arithmatic operators
             if self.current_char == "+":
                 self.advance()
                 return Token(PLUS, "+")
-
             if self.current_char == "-":
                 self.advance()
                 return Token(MINUS, "-")
-
             if self.current_char == "*":
                 self.advance()
                 return Token(MUL, "*")
-
             if self.current_char == "/":
                 self.advance()
                 return Token(DIV, '/')
-
             if self.current_char == "^":
                 self.advance()
                 return Token(EXPONENT, '^')
-
+            # scan parenthesis
             if self.current_char == "(":
                 self.advance()
                 return Token(LPAREN, '(')
-
             if self.current_char == ")":
                 self.advance()
                 return Token(RPAREN, ')')
-
-
-
-
-
-
-
-
+            #if we don't know what we're scanning, throw an error
             self.error("unknown token " + self.current_char)
+        # return the end of file
         return Token(EOF, None)
