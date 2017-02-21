@@ -1,6 +1,8 @@
 # willow
 a (very simple) weakly-typed programming language / interpreter, built in python
 
+a language package to provide syntax highlighting for the atom text editor is available [here](https://github.com/weepingwitch/language-willow)
+
 ## usage
 regular usage:
 ```bash
