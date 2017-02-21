@@ -1,0 +1,128 @@
+#testing out some basic string stuff#
+fun teststrings
+{
+  #A basic Hello World#
+  mystring = "Hello World";
+  print mystring;
+  mynum = 6;
+  mystring = mystring + mynum;
+  print mystring; #should print "hello world6.0"#
+  myword = "cat";
+  mysentence = "I want a {myword}";
+  print mysentence; #should print "I want a cat"#
+}
+
+#testing conditionals#
+fun testconditionals
+{
+  x = 3;
+  y = 5;
+  if (y >= x)
+  then
+  {
+    print "Correct!"; #this should be printed#
+  }
+  else
+  {
+    print "Incorrect!"; #this should not be printed#
+  };
+}
+
+#testing passing arguments to and from functions#
+fun testfunctions
+{
+  print "this was passed " + sysargs; #should print "this was passed myarg"#
+  mystring = "x from the previous function = " + x;
+  print mystring; #should print "x from the previous function = 3.0"#
+  i = 2;
+  j = 5;
+  k = i^j;
+  result = "the result is: " + k;
+  return result;
+
+}
+
+#testing some array things#
+fun testarrays
+{
+  myarray1 = [3,5];
+  myarray2 = myarray1 + 2;
+  print myarray2; #should print [5.0, 7.0]#
+  myarray1 = myarray1 * 2;
+  myarray3 = myarray1 . myarray2;
+  print myarray3; #should print [6.0, 10.0, 5.0, 7.0]#
+  myarray4 = myarray2 . 3.8;
+  print myarray4; #should print [5.0, 7.0, 3.8]#
+  myarray5 = [4,"four",[-6,2]];
+  print myarray5; #should print [4.0, 'four', [-6.0, 2.0]]#
+}
+
+#looops loops loops loops#
+fun testloops
+{
+  x = 0;
+  while (x < 10)
+  then {
+    x = x + 1;
+    print x; #should print the numbers 1 to 10#
+  };
+  print "yay!";
+}
+
+#testing file reading/writing#
+fun testfileio
+{
+  myvar = "hello filesystem!";
+  fileout("myfile.txt")(myvar);
+  filename = "myfile.txt";
+  myresult = filein(filename);
+  print myresult; #should print "hello filesystem!"#
+}
+
+#testing random number generation#
+fun testrandom
+{
+  mynum = random(1);
+  print mynum; #should print a float between 0 and 1#
+  mynum = random(10);
+  print mynum; #should print a float between 0 and 10#
+  mynum = random(100);
+  print mynum; #should print a float between 0 and 100#
+  if (random(10) > 5)
+  then{
+    print "Bigger!"; #this might print#
+  }
+  else{
+    print "Smaller..."; #or this might print#
+  }
+
+}
+
+#testing command-line input#
+fun testinput
+{
+  mystring = "what is your name? ";
+  myresult = prompt(mystring);
+  mysentence = "Hello, " + myresult;
+  print mysentence; #should print "Hello, willow" if you entered willow#
+  mynum = prompt("Give me a number: ");
+  x = mynum + 2;
+  mysentence = mynum+ " + 2.0 = " + x;
+  print mysentence; #should print "5.0 + 2.0 = 7.0" if you enter 5#
+}
+
+#the main function#
+fun main
+{
+  print "arguments: " + sysargs; #should print any command line arguments#
+  call(teststrings);
+  call(testconditionals); #you can call a function directly by name#
+  myfunc = "teSTfunCtiOns";
+  z = call(myfunc)("myarg"); #or by passing in a variable that holds a function name#
+  print z; #should print "the result is: 32.0"#
+  call(testarrays);
+  call(testloops);
+  call(testfileio);
+  call(testrandom);
+  #call(testinput);#
+}
