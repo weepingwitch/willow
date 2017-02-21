@@ -24,12 +24,12 @@ fun main
 ```
 
 for a more thorough suite of test functions, check out
-https://github.com/weepingwitch/willow/blob/master/tests/test.wlw which demonstrates some of the main features of the language
+[tests/test.wlw](https://github.com/weepingwitch/willow/blob/master/tests/test.wlw) which demonstrates some of the main features of the language
 
 ## influences
 while the syntax/grammar/abilities of my language are mainly dictated by what i am able to figure out how to program, some of the functionality is inspired by my experiences with ti-basic, shell scripting, javascript, and python
 
-the VERY beginning of the language was based off of this tutorial for creating a Pascal interpreter from scratch: https://ruslanspivak.com/lsbasi-part1/
+the VERY beginning of the language was based off of [this tutorial](https://ruslanspivak.com/lsbasi-part1/) for creating a Pascal interpreter from scratch
 
 however, i’ve made a Lot of changes to the actual language structure, and added a LOT that wasn’t covered in the tutorial (i.e. calling functions, conditionals, loops, input/output, etc.)
 
