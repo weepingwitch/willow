@@ -1,5 +1,5 @@
 # willow
-a (very simple) weakly-typed functional programming language / interpreter, built in python
+a (very simple) weakly-typed programming language / interpreter, built in python
 
 ## usage
 regular usage:
