@@ -17,10 +17,14 @@ python willow.py source_code.wlw myarg1 myarg2
 ```
 fun main
 {
+  # a simple hello world function #
   mystring = "Hello, world!";
   print mystring;
 }
 ```
+
+for a more thorough suite of test functions, check out
+https://github.com/weepingwitch/willow/blob/master/tests/test.wlw which demonstrates some of the main features of the language
 
 ## influences
 while the syntax/grammar/abilities of my language are mainly dictated by what i am able to figure out how to program, some of the functionality is inspired by my experiences with ti-basic, shell scripting, javascript, and python
