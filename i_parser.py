@@ -1,4 +1,5 @@
 # the parser reads in tokens from the lexer and generates an AST
+# the AST is then navigated by the interpreter
 
 from i_lexer import *
 from i_nodevisitor import *

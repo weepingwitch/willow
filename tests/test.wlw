@@ -127,5 +127,6 @@ fun main
   call(testloops);
   call(testfileio);
   call(testrandom);
+  print call(notafunction) #should print 0.0#
   #call(testinput);#
 }

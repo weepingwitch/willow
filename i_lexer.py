@@ -1,5 +1,6 @@
 # ahh, the lexer
 # this breaks the source code down into tokens
+# the tokens are then used by the parser
 
 from i_token import *
 
