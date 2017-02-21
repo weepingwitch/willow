@@ -12,6 +12,15 @@ passing in command-line arguments:
 python willow.py source_code.wlw myarg1 myarg2
 ```
 
+## examples / test functions
+
+```
+fun main
+{
+  mystring = "Hello, world!";
+  print mystring;
+}
+```
 
 ## influences
 while the syntax/grammar/abilities of my language are mainly dictated by what i am able to figure out how to program, some of the functionality is inspired by my experiences with ti-basic, shell scripting, javascript, and python
@@ -81,12 +90,12 @@ possible through this format:
 ```
 if (condition)
 then
- {
-#thencode#
+{
+  #thencode#
 }
 else
 {
-#elsecode#
+  #elsecode#
 };
 ```
 if condition evaluates to nonzero, thencode is run, if it evaluates to zero, elsecode is run
