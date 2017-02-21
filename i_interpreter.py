@@ -1,5 +1,5 @@
 from i_parser import *
-from format_mapper import *
+from i_format_mapper import *
 import numbers, re, random
 from string import Template
 
