@@ -33,23 +33,22 @@ the VERY beginning of the language was based off of [this tutorial](https://rusl
 
 however, i’ve made a Lot of changes to the actual language structure, and added a LOT that wasn’t covered in the tutorial (i.e. calling functions, conditionals, loops, input/output, etc.)
 
-## general features
-
-so right now, it’s an interpreted language.
-
-in other words, the source code files are analyzed/parsed/interpreted by an interpreter, meaning that they aren’t ever compiled into a stand-alone executable (mostly because i don’t know how to do that yet)
-
-the interpreter ignores all whitespace, and all statements must end in a semicolon - even conditionals and loops (see below). all functions are enclosed in brackets.
 
 ## variables
 
 you don’t have to declare variables as being of a certain type
 
-floats, strings, and arrays are the only variable types so far lol… that’s right, no ints, just floats because i’m lazy
+```
+myvar = 5;
+myvar = "hello!";
+myvar = [2,3,4];
+```
 
-booleans kinda exist when evaluating conditionals… 0 evaluates to false and non-zero evaluates to true
+floats, strings, and arrays are the only variable types so far.
 
-you can reference an uninitialized variable, it just defaults to 0
+booleans kinda exist when evaluating conditionals… 0.0 evaluates to false and non-zero evaluates to true
+
+you can reference an uninitialized variable, it just defaults to 0.0
 
 all variables are currently global in scope, with the exception of the special variable sysargs (see below)
 
