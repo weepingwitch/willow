@@ -59,10 +59,10 @@ the main function can call other functions
 it is possible to pass an argument to a function
 
 to do this, you use:
-
+```
 myarg = 5;
 call(function_name)(myarg);
-
+```
 and then, inside of the function function_name, you can access myarg through the special variable sysargs - so, inside of function_name, sysargs would evaluate to 5.0
 
 in the main function, sysargs returns the command line arguments supplied when the file was interpreted
@@ -70,10 +70,10 @@ in the main function, sysargs returns the command line arguments supplied when t
 it is passible to return arguments from a function using a return statement, for instance: “return myvar;”
 
 and then you can access it from the calling function by doing:
-
+```
 result = call(function_name)(myarg);
-
-functions can call themselves, allowing recursive programming
+```
+functions can call themselves, allowing recursive programming!
 
 ## built-in functions
 ### conditional statements:
