@@ -56,10 +56,15 @@ class Interpreter(NodeVisitor):
             arrindex = node.left.right
             if self.verbose: print "arrayloc: " + str(arrindex)
             if isnumber(arrindex):
-                myarr[int(arrindex)] = val
+                aindex = int(arrindex)
             else:
-                arrindex = self.vars[arrindex]
-                myarr[int(arrindex)] = val
+                aindex = self.vars[arrindex]
+            if isinstance(myarr, str):
+                if self.verbose: print "doing a string"
+                myarr = myarr[:aindex] + val + myarr[aindex + 1:]
+                self.vars[node.left.left.value] = myarr;
+            else:
+                myarr[int(aindex)] = val
         else:
             var_name = node.left.value
             val = self.visit(node.right)

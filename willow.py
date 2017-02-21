@@ -2,15 +2,19 @@
 import sys, argparse, os
 from i_interpreter import *
 
-
+# ok here's the part that reads in the source code
+# and then calls the interpreter on it
 def runscript(filename, verbose, args):
     if verbose: print args
     filename = filename.rstrip()
+    # add in the extension if it's not there
     if not filename.endswith(".wlw"):
         filename = filename + ".wlw"
+    # open and read the file
     f = open(filename)
     text = f.read()
-    Interpreter(Parser(Lexer(text, verbose))).interpret(args, os.path.dirname(os.path.realpath(f.name)))
+    fileloc = os.path.dirname(os.path.realpath(f.name))
+    Interpreter(Parser(Lexer(text, verbose))).interpret(args, fileloc)
     f.close()
 
 

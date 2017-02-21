@@ -4,9 +4,12 @@ fun teststrings
   #A basic Hello World#
   mystring = "Hello World";
   print mystring;
+  print mystring[6]; #should print "W"#
+  mystring[6] = "B";
+  print mystring; #should print "Hello Borld"#
   mynum = 6;
   mystring = mystring + mynum;
-  print mystring; #should print "hello world6.0"#
+  print mystring; #should print "Hello Borld6.0"#
   myword = "cat";
   mysentence = "I want a {myword}";
   print mysentence; #should print "I want a cat"#
@@ -20,11 +23,11 @@ fun testconditionals
   if (y >= x)
   then
   {
-    print "Correct!"; #this should be printed#
+    print "correct!"; #this should be printed#
   }
   else
   {
-    print "Incorrect!"; #this should not be printed#
+    print "incorrect!"; #this should not be printed#
   };
 }
 
@@ -90,10 +93,10 @@ fun testrandom
   print mynum; #should print a float between 0 and 100#
   if (random(10) > 5)
   then{
-    print "Bigger!"; #this might print#
+    print "bigger!"; #this might print#
   }
   else{
-    print "Smaller..."; #or this might print#
+    print "smaller..."; #or this might print#
   }
 
 }
@@ -103,9 +106,9 @@ fun testinput
 {
   mystring = "what is your name? ";
   myresult = prompt(mystring);
-  mysentence = "Hello, " + myresult;
-  print mysentence; #should print "Hello, willow" if you entered willow#
-  mynum = prompt("Give me a number: ");
+  mysentence = "hello, " + myresult;
+  print mysentence; #should print "hello, willow" if you entered willow#
+  mynum = prompt("give me a number: ");
   x = mynum + 2;
   mysentence = mynum+ " + 2.0 = " + x;
   print mysentence; #should print "5.0 + 2.0 = 7.0" if you enter 5#

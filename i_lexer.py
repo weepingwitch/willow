@@ -22,8 +22,7 @@ RESERVED_KEYWORDS = {
 # the lexer reads through the source code
 class Lexer(object):
     def __init__(self, text, verbose):
-        #turn all of the source code to lower case
-        self.text = text.lower()
+        self.text = text;
         # start at the beginning
         self.pos = 0
         self.current_char = self.text[self.pos]
