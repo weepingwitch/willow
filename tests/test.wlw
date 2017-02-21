@@ -5,7 +5,7 @@ fun teststrings
   mystring = "Hello World";
   print mystring;
   print mystring[6]; #should print "W"#
-  mystring[6] = "B";
+  mystring[6] = "B"; #wow you can assign to parts of a string!#
   print mystring; #should print "Hello Borld"#
   mynum = 6;
   mystring = mystring + mynum;
