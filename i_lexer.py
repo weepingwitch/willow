@@ -1,6 +1,9 @@
+# ahh, the lexer
+# this breaks the source code down into tokens
+
 from i_token import *
 
-#these are parsed as functions or whatever instead of 
+#these are parsed as functions or whatever instead of as variable names
 RESERVED_KEYWORDS = {
 'print':Token('PRINT','PRINT'),
 'fun':Token('FUNCTION','FUNCTION'),
@@ -16,16 +19,23 @@ RESERVED_KEYWORDS = {
 'random':Token("RANDOM","RANDOM")
 }
 
+# the lexer reads through the source code
 class Lexer(object):
     def __init__(self, text, verbose):
+        #turn all of the source code to lower case
         self.text = text.lower()
+        # start at the beginning
         self.pos = 0
         self.current_char = self.text[self.pos]
+        #if we are verbose, you'll get Lots of debug messages lol
         self.verbose = verbose
 
+    # maybe some day i'll add in real error handling lol lol
     def error(self, errortext):
         raise Exception("Invalid character: " + errortext)
 
+    # peek ahead at the next character
+    # useful for determining what comes next
     def peek(self):
         peek_pos = self.pos + 1
         if peek_pos > len(self.text) - 1:
@@ -33,6 +43,7 @@ class Lexer(object):
         else:
             return self.text[peek_pos]
 
+    # move forward one character in the source code
     def advance(self):
         self.pos += 1
         if self.pos > len(self.text) - 1:
@@ -40,53 +51,69 @@ class Lexer(object):
         else:
             self.current_char = self.text[self.pos]
 
+    # skip over anything until you get to another pound sign
+    # yay block comments
     def skip_comment(self):
         while self.current_char != '#':
             self.advance()
         self.advance()
 
+    # just skip that whitespace
     def skip_whitespace(self):
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
 
+    # scan in a STRING!!!
+    # quotetype refers to the quote that started the string
+    # that way you can have a single quote in a string defined by double quotes
     def lexSTRING(self,quotetype):
         self.advance()
         result = ''
         while self.current_char is not None and self.current_char != quotetype:
             result += self.current_char
             self.advance()
+        # hey look here's some debugging
         if self.verbose: print result
         self.advance()
         return result
 
+    # scan in an ARRAY!!!
     def lexARRAY(self):
         self.advance()
         result = []
+        #loop through, processing each kind of item
         while self.current_char is not ']':
+            # if it's a string, scan that
             if self.current_char in ("'",'"'):
                 item = self.lexSTRING(self.current_char)
+            # if it's an array in an aray, well, then, scan that
             elif self.current_char == '[':
                 item = self.lexARRAY()
+            # handle negative numbers
             elif self.current_char == '-':
                 self.advance()
                 item = 0-float(self.get_next_token().value)
+            # just read in the next token
             elif self.current_char.isalnum():
                 item = self.get_next_token().value
+            # if it's something else, variable that.
             else:
                 item = "{" + self.get_next_token().value + "}"
-
             if self.current_char == ",":
                 self.advance()
             result.append(item)
+        # advance over the ending bracket
         self.advance()
         return result
 
-
+    # scan in a FLOAT!
     def lexFLOAT(self):
         result = ''
+        # get the whole number part - scanning as a string for now
         while self.current_char is not None and self.current_char.isdigit():
             result += self.current_char
             self.advance()
+        # if there's a decimal, handle that
         if self.current_char == '.':
             result += self.current_char
             self.advance()
@@ -96,7 +123,8 @@ class Lexer(object):
             ):
                 result += self.current_char
                 self.advance()
-        if self.verbose: print "lexfloating " + result;
+        if self.verbose: print "lexfloating " + result
+        # cast that string as a float
         return float(result)
 
     def _id(self):

@@ -42,7 +42,6 @@ class Interpreter(NodeVisitor):
         if self.verbose: print "visiting compound node " + str(node)
         ret = 0
         for child in node.children:
-            #print self.visit(child)
             ret = (self.visit(child))
         return ret
 
@@ -50,9 +49,7 @@ class Interpreter(NodeVisitor):
         pass
 
     def visit_Assign(self, node):
-        #if self.verbose: print node.left.token.value + "lol"
         if node.token.type == ARRASSIGN:
-            if self.verbose: "OMFG found it"
             if self.verbose: print node.left.left.value
             val = self.visit(node.right)
             myarr = self.vars[node.left.left.value]
@@ -67,7 +64,7 @@ class Interpreter(NodeVisitor):
             var_name = node.left.value
             val = self.visit(node.right)
             self.vars[var_name] = val
-            if (self.verbose):print "parse assigning " + var_name + "=" + str(val)
+            if (self.verbose):print "assigning " + var_name + "=" + str(val)
         return val
 
     def visit_Var(self,node):

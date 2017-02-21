@@ -1,3 +1,7 @@
+# from https://gist.github.com/zed/1384338
+#
+# I DID NOT WRITE THIS lol ~willow
+
 try:
     ''.format_map({})
 except AttributeError: # Python < 3.2
