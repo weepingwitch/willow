@@ -95,20 +95,40 @@ fun main{
 
 in the main function, sysargs returns the command line arguments supplied when the file was interpreted
 
-it is passible to return arguments from a function using a return statement, for instance:
+functions can call themselves, allowing recursive programming!
+
 ```
-fun myfunction
-{
-  myvar = 5;
-  return myvar;
+#recursively print the factorial#
+fun factorial{
+  #sysargs holds the arguments passed to a function#
+  x = sysargs;
+  if (x == 1)
+  then {
+    return x;
+  }
+  else {
+    if (x == 0)
+    then{
+     return 0;
+    }
+    else{
+      y = x-1;
+      z = x * call(factorial)(y);
+      return z;
+    };
+  };
 }
 
 fun main{
-  result = call(myfunction);
-  print result;  # should print 5.0 #
+  #sysargs holds the arguments passed to a function.
+  in this case, it's the args from command line.
+  adding 0 to treat it as a float,
+  since it's read in from command line as string#
+  num = sysargs[0] + 0;
+  fact = call(factorial)(num);
+  print "the factorial of " + num + " is " + fact;
 }
 ```
-functions can call themselves, allowing recursive programming!
 
 ## built-in functions
 ### conditional statements:
