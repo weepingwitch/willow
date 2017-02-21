@@ -60,7 +60,14 @@ you can also use ^ to do exponent
 
 wow fun! it also follows order of operations yay
 
-you can add different variable types too! adding the float 5.0 to the string “hello” will produce “hello5.0″
+you can add different variable types too!
+
+```
+mystring = "hello";
+mynum = 6;
+mycombined = mystring + mynum;
+print mycombined;  # should print "hello6.0" #
+```
 
 ## functions
 
@@ -68,22 +75,38 @@ every program needs to have a main function, that is the function that is execut
 
 the main function can call other functions
 
-it is possible to pass an argument to a function
+it is possible to pass a value to a function, which is then accessed by the special variable sysargs:
 
-to do this, you use:
 ```
-myarg = 5;
-call(function_name)(myarg);
+fun addtwo
+{
+  x = sysargs; # sysargs holds what was passed in below #
+  x = x + 2;
+  return x;
+}
+
+fun main{
+  y = 5;
+  z = call(addtwo)(y);
+  print z; # should print 7.0 #
+}
+
 ```
-and then, inside of the function function_name, you can access myarg through the special variable sysargs - so, inside of function_name, sysargs would evaluate to 5.0
 
 in the main function, sysargs returns the command line arguments supplied when the file was interpreted
 
-it is passible to return arguments from a function using a return statement, for instance: “return myvar;”
-
-and then you can access it from the calling function by doing:
+it is passible to return arguments from a function using a return statement, for instance:
 ```
-result = call(function_name)(myarg);
+fun myfunction
+{
+  myvar = 5;
+  return myvar;
+}
+
+fun main{
+  result = call(myfunction);
+  print result;  # should print 5.0 #
+}
 ```
 functions can call themselves, allowing recursive programming!
 
