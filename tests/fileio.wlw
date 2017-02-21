@@ -1,6 +1,0 @@
-fun main
-{
-  myvar = "hello";
-  mystring = fileout("myfile.txt")(myvar);
-  
-}
