@@ -44,7 +44,7 @@ fun testconditionals
 #testing passing arguments to and from functions#
 fun testfunctions
 {
-  print "this was passed " + sysargs; #should print "this was passed myarg"#
+  print "this was passed " + argv; #should print "this was passed myarg"#
   mystring = "x from the previous function = " + x;
   print mystring; #should print "x from the previous function = 3.0"#
   i = 2;
@@ -129,7 +129,7 @@ fun testinput
 #the main function#
 fun main
 {
-  print "arguments: " + sysargs; #should print any command line arguments#
+  print "arguments: " + argv; #should print any command line arguments#
   call(teststrings);
   call(testconditionals); #you can call a function directly by name#
   myfunc = "testfunctions";

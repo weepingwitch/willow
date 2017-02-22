@@ -52,12 +52,12 @@ booleans kinda exist when evaluating conditionals… 0.0 evaluates to false and 
 
 you can reference an uninitialized variable, it just defaults to 0.0
 ### scope
-all variables are currently global in scope, with the exception of the special variable sysargs (see below)
+all variables are currently global in scope, with the exception of the special variable argv (see below)
 
 i might eventually add in local scoping for variables inside a function? maybe.
 
 ### special variables
-* **sysargs** - holds the arguments passed in to a function
+* **argv** - holds the arguments passed in to a function
 * **fileloc** - holds the path to the directory of the source code currently being executed
 
 
@@ -84,12 +84,12 @@ every program needs to have a main function, that is the function that is execut
 
 the main function can call other functions
 
-it is possible to pass a value to a function, which is then accessed by the special variable sysargs:
+it is possible to pass a value to a function, which is then accessed by the special variable argv:
 
 ```
 fun addtwo
 {
-  x = sysargs; # sysargs holds what was passed in below #
+  x = argv; # argv holds what was passed in below #
   x = x + 2;
   return x;
 }
@@ -102,15 +102,15 @@ fun main{
 
 ```
 
-in the main function, sysargs returns the command line arguments supplied when the file was interpreted
+in the main function, argv returns the command line arguments supplied when the file was interpreted
 
 functions can call themselves, allowing recursive programming!
 
 ```
 #recursively print the factorial#
 fun factorial{
-  #sysargs holds the arguments passed to a function#
-  x = sysargs;
+  #argv holds the arguments passed to a function#
+  x = argv;
   if (x == 1)
   then {
     return x;
@@ -129,11 +129,11 @@ fun factorial{
 }
 
 fun main{
-  #sysargs holds the arguments passed to a function.
+  #argv holds the arguments passed to a function.
   in this case, it's the args from command line.
   adding 0 to treat it as a float,
   since it's read in from command line as string#
-  num = sysargs[0] + 0;
+  num = argv[0] + 0;
   fact = call(factorial)(num);
   print "the factorial of " + num + " is " + fact;
 }

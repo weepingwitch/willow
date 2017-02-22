@@ -35,8 +35,8 @@ class Interpreter(NodeVisitor):
     # visit a function node
     def visit_Function(self, node):
         if self.verbose: print "attempting function " + str(node)
-        # store the function args in sysargs
-        self.vars["sysargs"] = self.funcargs[node]
+        # store the function args in argv
+        self.vars["argv"] = self.funcargs[node]
         # visit the block of code for the function
         returnvar = self.visit(node.block)
         if self.verbose: print "Recieved: " + str(returnvar)
@@ -450,7 +450,7 @@ class Interpreter(NodeVisitor):
         if funcs is None:
             return 0
         if self.verbose: print "storing " + str(args) + " in " + str(funcs['main'])
-        # put command line args as the sysargs for main
+        # put command line args as the argv for main
         self.funcargs[funcs['main']] = args
         # visit the main function
         self.visit(funcs['main'])

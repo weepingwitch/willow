@@ -1,7 +1,7 @@
 #recursively print the factorial#
 fun factorial{
-  #sysargs holds the arguments passed to a function#
-  x = sysargs;
+  #argv holds the arguments passed to a function#
+  x = argv;
   if (x == 1)
   then {
     return x;
@@ -22,11 +22,11 @@ fun factorial{
 }
 
 fun main{
-  #sysargs holds the arguments passed to a function.
+  #argv holds the arguments passed to a function.
   in this case, it's the args from command line.
   adding 0 to treat it as a float,
   since it's read in from command line as string#
-  num = sysargs[0] + 0;
+  num = argv[0] + 0;
   fact = call(factorial)(num);
   print "the factorial of " + num + " is " + fact;
 }
