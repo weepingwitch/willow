@@ -11,8 +11,7 @@ fun dogame
   while(stillplaying)
   then
   {
-    pt = guessesleft + " guesses left: ";
-    userguess = prompt(pt);
+    userguess = prompt(guessesleft + " guesses left: ");
     userguess = userguess + 0; # cast it as a number #
     if (userguess == secretnumber)
     then{

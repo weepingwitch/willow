@@ -126,7 +126,7 @@ class Interpreter(NodeVisitor):
         elif op == LEN:
             res = float(len(self.visit(node.expr)))
             return res
-        # round down a float 
+        # round down a float
         elif op == FLOOR:
             res = float(math.floor(self.visit(node.expr)))
             return res
@@ -134,7 +134,11 @@ class Interpreter(NodeVisitor):
         elif op == PROMPT:
             #check if the prompt text is a variable
             if not isinstance(node.expr, Var):
-                prompt = node.expr.value
+                if isinstance(node.expr, BinOp) or isinstance(node.expr, UnaryOp):
+                    #handle if it's a compound statement
+                    prompt = self.visit(node.expr)
+                else:
+                    prompt = node.expr.value
             else:
                 prompt = self.vars[node.expr.value]
             # prompt the user
