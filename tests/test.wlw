@@ -13,6 +13,7 @@ fun teststrings
   myword = "cat";
   mysentence = "I want a {myword}";
   print mysentence; #should print "I want a cat"#
+  print len(mysentence); #should print 12.0#
 }
 
 #testing conditionals#
@@ -58,6 +59,7 @@ fun testarrays
   print myarray4; #should print [5.0, 7.0, 3.8]#
   myarray5 = [4,"four",[-6,2]];
   print myarray5; #should print [4.0, 'four', [-6.0, 2.0]]#
+  print len(myarray5); #should print 3.0#
 }
 
 #looops loops loops loops#
@@ -76,8 +78,9 @@ fun testloops
 fun testfileio
 {
   myvar = "hello filesystem!";
-  fileout("myfile.txt")(myvar);
-  filename = "myfile.txt";
+  filename = fileloc + "myfile.txt";
+  fileout(filename)(myvar);
+  print filename; #should print the path to myfile.txt in the same directory as this file#
   myresult = filein(filename);
   print myresult; #should print "hello filesystem!"#
 }
@@ -90,7 +93,7 @@ fun testrandom
   mynum = random(10);
   print mynum; #should print a float between 0 and 10#
   mynum = random(100);
-  print mynum; #should print a float between 0 and 100#
+  print floor(mynum); #should print a whole number between 0 and 100#
   if (random(10) > 5)
   then{
     print "bigger!"; #this might print#

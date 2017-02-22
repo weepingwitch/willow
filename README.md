@@ -37,7 +37,7 @@ however, i’ve made a Lot of changes to the actual language structure, and adde
 
 
 ## variables
-
+### typing
 you don’t have to declare variables as being of a certain type
 
 ```
@@ -51,8 +51,15 @@ floats, strings, and arrays are the only variable types so far.
 booleans kinda exist when evaluating conditionals… 0.0 evaluates to false and non-zero evaluates to true
 
 you can reference an uninitialized variable, it just defaults to 0.0
-
+### scope
 all variables are currently global in scope, with the exception of the special variable sysargs (see below)
+
+i might eventually add in local scoping for variables inside a function? maybe.
+
+### special variables
+* **sysargs** - holds the arguments passed in to a function
+* **fileloc** - holds the path to the directory of the source code currently being executed
+
 
 ## basic arithmatic
 

@@ -32,6 +32,8 @@ RANDOM = "RANDOM"
 RETURN = "RETURN"
 INDEX = "INDEX"
 WHILE = "WHILE"
+LEN = "LEN"
+FLOOR = "FLOOR"
 
 # here is the Token class
 class Token(object):

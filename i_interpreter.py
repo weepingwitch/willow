@@ -1,6 +1,6 @@
 from i_parser import *
 from i_format_mapper import *
-import numbers, re, random
+import numbers, re, random, math
 from string import Template
 
 # the interpreter navigates the AST by visiting each node and evaluating it
@@ -122,6 +122,14 @@ class Interpreter(NodeVisitor):
         elif op == PRINT:
             print self.visit(node.expr)
             return node.expr;
+        # compute the length of a string or array
+        elif op == LEN:
+            res = float(len(self.visit(node.expr)))
+            return res
+        # round down a float 
+        elif op == FLOOR:
+            res = float(math.floor(self.visit(node.expr)))
+            return res
         # get user input
         elif op == PROMPT:
             #check if the prompt text is a variable
@@ -153,7 +161,7 @@ class Interpreter(NodeVisitor):
             if self.verbose: print self.fileloc
             if self.verbose: print fname
             # find a file from the same directory
-            f = open(self.fileloc + '/' + fname)
+            f = open( fname)
             text = f.read()
             f.close()
             # return the contents
@@ -344,7 +352,7 @@ class Interpreter(NodeVisitor):
             else:
                 fname = self.vars[node.left.value]
             # write to the file
-            f = open(self.fileloc + '/' + fname, "w")
+            f = open(fname, "w")
             text = self.visit(node.right)
             f.write(text)
             f.close()
@@ -422,7 +430,9 @@ class Interpreter(NodeVisitor):
 
     # interpret the code
     def interpret(self, args, fileloc):
-        self.fileloc = fileloc
+        # store the file location in the fileloc
+        self.fileloc = fileloc + "/"
+        self.vars['fileloc'] = self.fileloc
         # get the list of cuntions
         funcs = self.parser.parse()
         self.funcs = funcs

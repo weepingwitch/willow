@@ -17,7 +17,9 @@ RESERVED_KEYWORDS = {
 'return':Token("RETURN","RETURN"),
 'filein':Token("FILEIN","FILEIN"),
 'fileout':Token("FILEOUT","FILEOUT"),
-'random':Token("RANDOM","RANDOM")
+'random':Token("RANDOM","RANDOM"),
+'len':Token("LEN","LEN"),
+'floor':Token("FLOOR","FLOOR")
 }
 
 # the lexer reads through the source code

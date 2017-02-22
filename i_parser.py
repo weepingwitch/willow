@@ -198,6 +198,14 @@ class Parser(object):
             self.eat(PROMPT)
             node = UnaryOp(token,self.getexpr())
             return node
+        elif token.type == LEN:
+            self.eat(LEN)
+            node = UnaryOp(token,self.getexpr())
+            return node
+        elif token.type == FLOOR:
+            self.eat(FLOOR)
+            node = UnaryOp(token,self.getexpr())
+            return node
         elif token.type == FILEIN:
             self.eat(FILEIN)
             node = UnaryOp(token,self.getexpr())
