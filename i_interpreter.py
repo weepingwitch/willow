@@ -324,6 +324,12 @@ class Interpreter(NodeVisitor):
                 res = 1
             else:
                 res = 0
+        elif node.op.type == NOTEQ:
+            res = (self.visit(node.left) != self.visit(node.right))
+            if (res):
+                res = 1
+            else:
+                res = 0
         elif node.op.type == LESSER:
             res = (self.visit(node.left) < self.visit(node.right))
             if (res):

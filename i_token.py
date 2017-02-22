@@ -6,6 +6,7 @@ LPAREN, RPAREN = '(', ')'
 LBRACKET, RBRACKET = '{', '}'
 LSQUARE, RSQUARE = '[', ']'
 EQUALS = "=="
+NOTEQ = "!="
 GREATER = ">"
 LESSER = "<"
 GREATEREQ = ">="

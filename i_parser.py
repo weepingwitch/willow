@@ -323,6 +323,11 @@ class Parser(object):
             token = self.current_token
             self.eat(EQUALS)
             node = BinOp(left=node, op=token, right=self.getterm())
+        if self.current_token.type == NOTEQ:
+            if self.verbose: print self.current_token
+            token = self.current_token
+            self.eat(NOTEQ)
+            node = BinOp(left=node, op=token, right=self.getterm())
         if self.current_token.type == LESSER:
             if self.verbose: print self.current_token
             token = self.current_token

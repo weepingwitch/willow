@@ -30,6 +30,15 @@ fun testconditionals
   {
     print "incorrect!"; #this should not be printed#
   };
+  if (y!=x)
+  then
+  {
+    print "correct!"; #this should be printed#
+  }
+  else
+  {
+    print "incorrect!"; #this should not be printed#
+  };
 }
 
 #testing passing arguments to and from functions#
@@ -123,7 +132,7 @@ fun main
   print "arguments: " + sysargs; #should print any command line arguments#
   call(teststrings);
   call(testconditionals); #you can call a function directly by name#
-  myfunc = "teSTfunCtiOns";
+  myfunc = "testfunctions";
   z = call(myfunc)("myarg"); #or by passing in a variable that holds a function name#
   print z; #should print "the result is: 32.0"#
   call(testarrays);

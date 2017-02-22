@@ -184,6 +184,10 @@ class Lexer(object):
                 self.advance()
                 self.advance()
                 return Token(EQUALS, "==")
+            if self.current_char == "!" and (self.peek() == "="):
+                self.advance()
+                self.advance()
+                return Token(NOTEQ, "!=")
             if self.current_char == ">" and (self.peek() != "="):
                 self.advance()
                 return Token(GREATER, ">")
