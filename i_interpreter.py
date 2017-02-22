@@ -36,7 +36,7 @@ class Interpreter(NodeVisitor):
     def visit_Function(self, node):
         if self.verbose: print "attempting function " + str(node)
         # store the function args in argv
-        self.vars["argv"] = self.funcargs[node]
+        #self.vars["argv"] = self.funcargs[node]
 
 
         # visit the block of code for the function
@@ -435,14 +435,19 @@ class Interpreter(NodeVisitor):
             argv = argv[1:-1]
         previous = None
         # save the previous call's argv
+        # adapted from munificent's solution
+        # https://www.reddit.com/r/ProgrammingLanguages/comments/5vemme/working_on_my_own_simple_interpreted_language/de2fla9/
         if (self.funcargs.get(funnode) != None):
             previous = self.funcargs[funnode]
         # store them in the funcargs dictionary
         self.funcargs[funnode] = argv
+        self.vars["argv"] = self.funcargs[funnode]
         # visit the function and return the result
         res = self.visit(funnode)
         # restore the outer call's argv
+        if self.verbose: print ("attempting to restore: " + str(previous))
         self.funcargs[funnode] = previous
+        self.vars['argv'] = previous
         if self.verbose: print ("attempting to return: " + str(res))
         return res
 
@@ -461,4 +466,4 @@ class Interpreter(NodeVisitor):
         # put command line args as the argv for main
         self.funcargs[funcs['main']] = args
         # visit the main function
-        self.visit(funcs['main'])
+        self.dofunc('main', args)
