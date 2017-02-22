@@ -2,7 +2,7 @@
 
 fun dogame
 {
-  won = 0; # ewhether the player has won or not #
+  won = 0; # whether the player has won or not #
   stillplaying = 1; # whether the player is still playing #
   secretnumber = floor(random(100)); # generate the random number #
   guessesleft = 10; # the player has 10 guesses to get it #

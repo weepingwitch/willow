@@ -190,3 +190,5 @@ the above code will write the text “hello filesystem!” to the file myfile.tx
 ### random number generation:
 
 you can generate random floats by calling random(max_number) which will generate a float between 0 and max_number
+
+see an example of this in action at [tests/guessinggame.wlw](https://github.com/weepingwitch/willow/blob/master/tests/guessinggame.wlw)
