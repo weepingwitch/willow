@@ -37,6 +37,8 @@ class Interpreter(NodeVisitor):
         if self.verbose: print "attempting function " + str(node)
         # store the function args in argv
         self.vars["argv"] = self.funcargs[node]
+
+
         # visit the block of code for the function
         returnvar = self.visit(node.block)
         if self.verbose: print "Recieved: " + str(returnvar)
@@ -431,10 +433,16 @@ class Interpreter(NodeVisitor):
             argv = self.vars[argv]
         elif isinstance(argv, str) and argv[0] in ('"', "'"):
             argv = argv[1:-1]
+        previous = None
+        # save the previous call's argv
+        if (self.funcargs.get(funnode) != None):
+            previous = self.funcargs[funnode]
         # store them in the funcargs dictionary
         self.funcargs[funnode] = argv
         # visit the function and return the result
         res = self.visit(funnode)
+        # restore the outer call's argv
+        self.funcargs[funnode] = previous
         if self.verbose: print ("attempting to return: " + str(res))
         return res
 
