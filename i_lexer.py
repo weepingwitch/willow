@@ -24,13 +24,16 @@ RESERVED_KEYWORDS = {
 
 # the lexer reads through the source code
 class Lexer(object):
-    def __init__(self, text, verbose):
+    def __init__(self, text, verbose, tokens, filename):
         self.text = text;
         # start at the beginning
         self.pos = 0
         self.current_char = self.text[self.pos]
         #if we are verbose, you'll get Lots of debug messages lol
         self.verbose = verbose
+        #if we are in tokens mode, we will generate a skeleton of the program
+        self.tokens = tokens
+        self.filename = filename
 
     # maybe some day i'll add in real error handling lol lol
     def error(self, errortext):

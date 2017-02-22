@@ -8,9 +8,13 @@ from i_AST import *
 class Parser(object):
     def __init__(self, lexer):
         self.lexer = lexer
+        # tokentext tracks all parsed tokens, for debugging
+        self.tokentext = lexer.filename + ":\n"
         self.current_token = self.lexer.get_next_token()
+        self.tokentext += str(self.current_token.value)
         # propagate the verbose flag
         self.verbose = lexer.verbose
+        self.tokens = lexer.tokens
 
     # again, note to self, do error handling at some point in the future
     def error(self, errortext):
@@ -21,6 +25,8 @@ class Parser(object):
         if self.current_token.type == token_type:
             if(self.verbose): print "ate " + str(self.current_token)
             self.current_token = self.lexer.get_next_token()
+            # tokentext tracks all parsed tokens, for debugging
+            self.tokentext += str(self.current_token.value)
         else:
             self.error("expecting " + token_type + " got " + str(self.current_token))
 
@@ -346,5 +352,8 @@ class Parser(object):
         # make sure we reach the end of the file
         if self.current_token.type != EOF and self.current_token.type != SEMI:
             self.error("EOF expected: " + str(self.current_token))
+        if self.tokens:
+            print self.tokentext
+            print
         # return the functions to the interpreter
         return functions
