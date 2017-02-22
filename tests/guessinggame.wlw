@@ -1,0 +1,83 @@
+# a simple guessing game #
+
+fun dogame
+{
+  won = 0; # ewhether the player has won or not #
+  stillplaying = 1; # whether the player is still playing #
+  secretnumber = floor(random(100)); # generate the random number #
+  guessesleft = 10; # the player has 10 guesses to get it #
+  print "Can you guess the random number (1-100)?";
+  userguess = -1;
+  while(stillplaying)
+  then
+  {
+    pt = guessesleft + " guesses left: ";
+    userguess = prompt(pt);
+    userguess = userguess + 0; # cast it as a number #
+    if (userguess == secretnumber)
+    then{
+      won = 1;
+      stillplaying = 0;
+    }
+    else
+    {
+      guessesleft = guessesleft - 1;
+      if (guessesleft <= 0)
+      then
+      {
+        stillplaying = 0;
+      }
+      else{
+        if (userguess > secretnumber)
+        then{
+          print "Lower!";
+        }
+        else
+        {
+          print "Higher!";
+        };
+      };
+    };
+  };
+  return won;
+}
+
+fun main
+{
+  playing = 1;
+  while (playing)
+  then
+  {
+    res = call(dogame);
+    if (res)
+    then
+    {
+      print "you won!";
+    }
+    else
+    {
+      print "you lost...";
+      print "it was: " + secretnumber;
+    };
+    answer = prompt("Play again? y/n ");
+    if (answer == "y")
+    then
+    {
+      playing = 1;
+    }
+    else
+    {
+      if (answer == "n")
+      then
+      {
+        playing = 0;
+      }
+      else
+      {
+        print "I didn't understand that...";
+        print "Let's play again anyway!";
+        playing = 1;
+      };
+    };
+  };
+}
