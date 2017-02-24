@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys, argparse, os
+import sys, argparse, os, string
 from i_interpreter import *
 
 # ok here's the part that reads in the source code
@@ -11,7 +11,7 @@ def runscript(filename, verbose, args, tokens):
     if not filename.endswith(".wlw"):
         filename = filename + ".wlw"
     # open and read the file
-    f = open(filename)
+    f = open(filename, "U")
     text = f.read()
     # get the file location (so scripts can reference other files)
     fileloc = os.path.dirname(os.path.realpath(f.name))

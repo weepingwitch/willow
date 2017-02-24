@@ -229,6 +229,10 @@ class Interpreter(NodeVisitor):
             for i in lval:
                 res[lval.index(i)] = self.dosubtract( res[lval.index(i)],rval)
             return res
+        #do string subtraction
+        elif (isinstance(lval, str) or isinstance(rval, str)):
+            res = str(str(lval).replace(str(rval),""))
+            return res
         # ehhh hopefully we don't get here
         else:
             # maybe i should throw some sort of error or something?

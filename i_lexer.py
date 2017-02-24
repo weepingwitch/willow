@@ -28,6 +28,7 @@ class Lexer(object):
         self.text = text;
         # start at the beginning
         self.pos = 0
+        self.linecount = 1
         self.current_char = self.text[self.pos]
         #if we are verbose, you'll get Lots of debug messages lol
         self.verbose = verbose
@@ -60,12 +61,18 @@ class Lexer(object):
     # yay block comments
     def skip_comment(self):
         while self.current_char != '#':
+            if self.current_char == '\n':
+                if self.verbose: print "found a newline!"
+                self.linecount += 1
             self.advance()
         self.advance()
 
     # just skip that whitespace
     def skip_whitespace(self):
         while self.current_char is not None and self.current_char.isspace():
+            if self.current_char == '\n':
+                if self.verbose: print "found a newline!"
+                self.linecount += 1
             self.advance()
 
     # scan in a STRING!!!
@@ -142,6 +149,7 @@ class Lexer(object):
         if self.verbose: print "id parsed: " + result
         # chck to see if it s a reserved function, otherwise just return an ID
         token = RESERVED_KEYWORDS.get(result, Token(ID, result))
+        token.linecount = self.linecount
         return token
 
     # read in the next token
@@ -154,90 +162,93 @@ class Lexer(object):
                 continue
             # handle whitespace skipping
             if self.current_char.isspace():
+                if self.current_char == '\n':
+                    if self.verbose: print "found a newline!"
+                    self.linecount += 1
                 self.skip_whitespace()
                 continue
             # scan brackets (for variable substitution in strings)
             if self.current_char == "{":
                 self.advance()
-                return Token(LBRACKET, '{')
+                return Token(LBRACKET, '{',self.linecount)
             if self.current_char == "}":
                 self.advance()
-                return Token(RBRACKET, '}')
+                return Token(RBRACKET, '}',self.linecount)
             # scan strings
             if self.current_char == '"' or self.current_char == "'":
-                return Token(STRING, self.lexSTRING(self.current_char))
+                return Token(STRING, self.lexSTRING(self.current_char),self.linecount)
             # scan variables / function names
             if self.current_char.isalpha():
                 return self._id()
             # scan arrays
             if self.current_char == '[':
-                return Token(ARRAY, self.lexARRAY())
+                return Token(ARRAY, self.lexARRAY(),self.linecount)
             # scan floats
             if self.current_char.isdigit():
-                return Token(FLOAT, self.lexFLOAT())
+                return Token(FLOAT, self.lexFLOAT(),self.linecount)
             # scan single =, used for assignment
             if self.current_char == "=" and (self.peek() != "="):
                 self.advance()
-                return Token(ASSIGN, "=")
+                return Token(ASSIGN, "=",self.linecount)
             # scan ==, and other compairson operators
             elif self.current_char == "=" and (self.peek() == "="):
                 self.advance()
                 self.advance()
-                return Token(EQUALS, "==")
+                return Token(EQUALS, "==",self.linecount)
             if self.current_char == "!" and (self.peek() == "="):
                 self.advance()
                 self.advance()
-                return Token(NOTEQ, "!=")
+                return Token(NOTEQ, "!=",self.linecount)
             if self.current_char == ">" and (self.peek() != "="):
                 self.advance()
-                return Token(GREATER, ">")
+                return Token(GREATER, ">",self.linecount)
             elif self.current_char == ">" and (self.peek() == "="):
                 self.advance()
                 self.advance()
-                return Token(GREATEREQ, ">=")
+                return Token(GREATEREQ, ">=",self.linecount)
             if self.current_char == "<" and (self.peek() != "="):
                 self.advance()
-                return Token(LESSER, "<")
+                return Token(LESSER, "<",self.linecount)
             elif self.current_char == "<" and (self.peek() == "="):
                 self.advance()
                 self.advance()
-                return Token(LESSEREQ, "<=")
+                return Token(LESSEREQ, "<=",self.linecount)
             # scan a comma
             if self.current_char == ',':
                 self.advance()
-                return Token(COMMA, ',')
+                return Token(COMMA, ',',self.linecount)
             # scan a period, used to concat
             if self.current_char == '.':
                 self.advance()
-                return Token(CONCAT, '.')
+                return Token(CONCAT, '.',self.linecount)
             # scan a semicolon, used to end statements
             if self.current_char == ";":
                 self.advance()
-                return Token(SEMI, ';')
+                return Token(SEMI, ';',self.linecount)
             #scan arithmatic operators
             if self.current_char == "+":
                 self.advance()
-                return Token(PLUS, "+")
+                return Token(PLUS, "+",self.linecount)
             if self.current_char == "-":
                 self.advance()
-                return Token(MINUS, "-")
+                return Token(MINUS, "-",self.linecount)
             if self.current_char == "*":
                 self.advance()
-                return Token(MUL, "*")
+                return Token(MUL, "*",self.linecount)
             if self.current_char == "/":
                 self.advance()
-                return Token(DIV, '/')
+                return Token(DIV, '/',self.linecount)
             if self.current_char == "^":
                 self.advance()
-                return Token(EXPONENT, '^')
+                return Token(EXPONENT, '^',self.linecount)
             # scan parenthesis
             if self.current_char == "(":
                 self.advance()
-                return Token(LPAREN, '(')
+                return Token(LPAREN, '(',self.linecount)
             if self.current_char == ")":
                 self.advance()
-                return Token(RPAREN, ')')
+                return Token(RPAREN, ')' ,self.linecount)
             #if we don't know what we're scanning, throw an error
-            self.error("unknown token " + self.current_char)
+            self.error("unknown token on line " + self.linecount + self.current_char)
         # return the end of file
         return Token(EOF, None)

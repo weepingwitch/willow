@@ -39,9 +39,10 @@ FLOOR = "FLOOR"
 # here is the Token class
 class Token(object):
     # each token has a type and a value
-    def __init__(self, mtype, mvalue):
+    def __init__(self,mtype, mvalue, lc=0):
         self.type = mtype
         self.value = mvalue
+        self.linecount = lc
 
     #when you debug, you can print out a token
     def __str__(self):
