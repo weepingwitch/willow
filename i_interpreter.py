@@ -24,7 +24,10 @@ def islist(s):
 
 # useful to break a string into bits for string division
 def chunkstring(string, length):
-    return (string[0+i:length+i] for i in range(0, len(string), length))
+    try:
+        return (string[0+i:length+i] for i in range(0, len(string), length))
+    except (ValueError, TypeError) as e:
+        return [0];
 
 
 class Interpreter(NodeVisitor):
@@ -296,8 +299,11 @@ class Interpreter(NodeVisitor):
     def dodiv(self, lval, rval):
         #float division
         if isnumber(lval) and isnumber(rval):
-            res = lval/rval
-            return res
+            try:
+                res = lval/rval
+                return res
+            except ZeroDivisionError:
+                return 0.0
         #array/float division
         elif isinstance(rval,list):
             res = list(rval)
