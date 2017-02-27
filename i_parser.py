@@ -28,7 +28,7 @@ class Parser(object):
             # tokentext tracks all parsed tokens, for debugging
             self.tokentext += str(self.current_token.value)
         else:
-            self.error("expecting " + token_type + " got " + str(self.current_token))
+            self.error("line " + self.current_token.linecount + ": expecting " + token_type + " got " + str(self.current_token))
 
     # create a dictionary of all of the functions in a program
     def parsefunctions(self):
@@ -47,14 +47,14 @@ class Parser(object):
         #then, get the code
         block_node = self.getblock()
         #create and return the node
-        function_node = Function(fun_name, block_node)
+        function_node = Function(self.current_token.linecount,fun_name, block_node)
         return function_node
 
     # not too useful right now, basically just parses a compound statement
     # might add something about local variable scope here later
     def getblock(self):
         compound_statement_node = self.getcompound_statement()
-        node = Block(compound_statement_node)
+        node = Block(self.current_token.linecount,compound_statement_node)
         return node
 
     # parse in all of the statements in a block
@@ -64,8 +64,9 @@ class Parser(object):
         if (self.verbose): print "beginning compound statement"
         # get a list of statements
         nodes = self.getstatement_list()
+        root = Compound(self.current_token.linecount)
         self.eat(RBRACKET)
-        root = Compound()
+
         for node in nodes:
             root.children.append(node)
         return root
@@ -131,7 +132,7 @@ class Parser(object):
                 self.eat(ELSEDO)
                 elsedoblock = self.getblock()
         # create a conditional op node
-        node = CondOp(conditional,thendoblock,elsedoblock)
+        node = CondOp(self.current_token.linecount,conditional,thendoblock,elsedoblock)
         return node;
 
     # time to parse while loops
@@ -142,7 +143,7 @@ class Parser(object):
         if self.current_token.type == THENDO:
             self.eat(THENDO)
             thendoblock = self.getblock();
-        node = LoopOp(conditional,thendoblock)
+        node = LoopOp(self.current_token.linecount,conditional,thendoblock)
         return node;
 
 
@@ -157,14 +158,14 @@ class Parser(object):
         # for array assignment
         if not isinstance(left, Var):
             if self.verbose: print "OMFG assigning a array part"
-            token = Token(ARRASSIGN, ARRASSIGN)
-        node = Assign(left, token, right)
+            token = Token(token.linecount,ARRASSIGN, ARRASSIGN)
+        node = Assign(token.linecount,left, token, right)
         return node
 
     # processing a name that is not a string
     def getvariable(self):
         varname = self.current_token
-        node = Var(varname)
+        node = Var(varname.linecount,varname)
         self.eat(ID)
         if self.verbose: print "ate an ID"
         # if the next character is a bracket, do that
@@ -173,7 +174,7 @@ class Parser(object):
             arr = self.current_token.value
             self.eat(ARRAY)
             aindex = arr[0]
-            node = BinOp(left = node, op=Token(INDEX,INDEX), right = aindex)
+            node = BinOp(varname.linecount,left = node, op=Token(INDEX,INDEX), right = aindex)
             # at some point i messed up the code for array assignment? idk
             # it works tho just trust me
             if (self.current_token.type == ASSIGN):
@@ -194,35 +195,35 @@ class Parser(object):
         # first, some unary operators
         if token.type == PLUS:
             self.eat(PLUS)
-            node = UnaryOp(token, self.getfactor())
+            node = UnaryOp(self.current_token.linecount,token, self.getfactor())
             return node
         elif token.type == MINUS:
             self.eat(MINUS)
-            node = UnaryOp(token,self.getfactor())
+            node = UnaryOp(self.current_token.linecount,token,self.getfactor())
             return node
         elif token.type == PROMPT:
             self.eat(PROMPT)
-            node = UnaryOp(token,self.getexpr())
+            node = UnaryOp(self.current_token.linecount,token,self.getexpr())
             return node
         elif token.type == LEN:
             self.eat(LEN)
-            node = UnaryOp(token,self.getexpr())
+            node = UnaryOp(self.current_token.linecount,token,self.getexpr())
             return node
         elif token.type == FLOOR:
             self.eat(FLOOR)
-            node = UnaryOp(token,self.getexpr())
+            node = UnaryOp(self.current_token.linecount,token,self.getexpr())
             return node
         elif token.type == FILEIN:
             self.eat(FILEIN)
-            node = UnaryOp(token,self.getexpr())
+            node = UnaryOp(self.current_token.linecount,token,self.getexpr())
             return node
         elif token.type == PRINT:
             self.eat(PRINT)
-            node = UnaryOp(token,self.getexpr())
+            node = UnaryOp(self.current_token.linecount,token,self.getexpr())
             return node
         elif token.type == RANDOM:
             self.eat(RANDOM)
-            node = UnaryOp(token,self.getterm())
+            node = UnaryOp(self.current_token.linecount,token,self.getterm())
             return node
         #now, some more complex functions
         elif token.type == CALL:
@@ -232,14 +233,14 @@ class Parser(object):
             right=self.getexpr()
             if isinstance(right, String): right.value = "'" + right.value + "'"
             if self.verbose:print "attempting to pass " + str(right.value) + " to " + str(left.value);
-            node = BinOp(left=left,op=token,right=right)
+            node = BinOp(self.current_token.linecount,left=left,op=token,right=right)
             return node;
         elif token.type == FILEOUT:
             self.eat(FILEOUT)
             left = self.getfactor()
             right = self.getexpr()
             if isinstance(right, String): right.value = "'" + right.value + "'"
-            node = BinOp(left=left,op=token,right=right)
+            node = BinOp(self.current_token.linecount,left=left,op=token,right=right)
             return node;
         elif token.type == RETURN:
             self.eat(RETURN)
@@ -249,7 +250,7 @@ class Parser(object):
             if self.verbose:print "attempting to return " + str(right)
             if isinstance(right, BinOp):
                 right.value = [right.left.value, right.right.value]
-            node = UnaryOp(token, right.value)
+            node = UnaryOp(self.current_token.linecount,token, right.value)
             return node
         elif token.type==COND:
             self.eat(COND)
@@ -261,10 +262,10 @@ class Parser(object):
             return node
         elif token.type == FLOAT:
             self.eat(FLOAT)
-            return Num(token)
+            return Num(self.current_token.linecount,token)
         elif token.type == ARRAY:
             self.eat(ARRAY)
-            return Array(token)
+            return Array(self.current_token.linecount,token)
         elif token.type == LPAREN:
             self.eat(LPAREN)
             node = self.getexpr()
@@ -272,15 +273,15 @@ class Parser(object):
             return node
         elif token.type == SEMI:
             #self.eat(SEMI)
-            node = Num(Token(FLOAT,0.0))
+            node = Num(self.current_token.linecount,Token(FLOAT,0.0))
             return node
         elif token.type == RBRACKET:
-            node = Num(Token(FLOAT,0.0))
+            node = Num(self.current_token.linecount,Token(FLOAT,0.0))
             return node
         elif token.type == STRING:
             self.eat(STRING)
             if self.verbose: print token
-            return String(token)
+            return String(self.current_token.linecount,token)
         # if all else fails, it's probably a variable?
         else:
             node = self.getvariable()
@@ -299,7 +300,7 @@ class Parser(object):
                 self.eat(DIV)
             elif token.type == EXPONENT:
                 self.eat(EXPONENT)
-            node = BinOp(left = node, op = token, right = self.getfactor())
+            node = BinOp(token.linecount,left = node, op = token, right = self.getfactor())
         return node
 
     # get an expression
@@ -316,38 +317,38 @@ class Parser(object):
                 self.eat(CONCAT)
             elif token.type == MINUS:
                 self.eat(MINUS)
-            node = BinOp(left=node, op = token, right=self.getterm())
+            node = BinOp(token.linecount,left=node, op = token, right=self.getterm())
         # this is also where we handle comparisons
         if self.current_token.type == EQUALS:
             if self.verbose: print self.current_token
             token = self.current_token
             self.eat(EQUALS)
-            node = BinOp(left=node, op=token, right=self.getterm())
+            node = BinOp(token.linecount,left=node, op=token, right=self.getterm())
         if self.current_token.type == NOTEQ:
             if self.verbose: print self.current_token
             token = self.current_token
             self.eat(NOTEQ)
-            node = BinOp(left=node, op=token, right=self.getterm())
+            node = BinOp(token.linecount,left=node, op=token, right=self.getterm())
         if self.current_token.type == LESSER:
             if self.verbose: print self.current_token
             token = self.current_token
             self.eat(LESSER)
-            node = BinOp(left=node, op=token, right=self.getterm())
+            node = BinOp(token.linecount,left=node, op=token, right=self.getterm())
         if self.current_token.type == GREATER:
             if self.verbose: print self.current_token
             token = self.current_token
             self.eat(GREATER)
-            node = BinOp(left=node, op=token, right=self.getterm())
+            node = BinOp(token.linecount,left=node, op=token, right=self.getterm())
         if self.current_token.type == LESSEREQ:
             if self.verbose: print self.current_token
             token = self.current_token
             self.eat(LESSEREQ)
-            node = BinOp(left=node, op=token, right=self.getterm())
+            node = BinOp(token.linecount,left=node, op=token, right=self.getterm())
         if self.current_token.type == GREATEREQ:
             if self.verbose: print self.current_token
             token = self.current_token
             self.eat(GREATEREQ)
-            node = BinOp(left=node, op=token, right=self.getterm())
+            node = BinOp(token.linecount,left=node, op=token, right=self.getterm())
         return node
 
     # and here's where the magic happens
