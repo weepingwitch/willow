@@ -299,12 +299,12 @@ class Interpreter(NodeVisitor):
             res = lval/rval
             return res
         #array/float division
-        elif isnumber(lval) and isinstance(rval,list):
+        elif isinstance(rval,list):
             res = list(rval)
             for i in rval:
                 res[rval.index(i)] = self.dodiv(lval,res[rval.index(i)])
             return res
-        elif  (isinstance(lval, list) and isnumber(rval)):
+        elif  (isinstance(lval, list)):
             res = list(lval)
             for i in lval:
                 res[lval.index(i)] = self.dodiv(res[lval.index(i)], rval)
@@ -312,7 +312,7 @@ class Interpreter(NodeVisitor):
         #subdivide a string;
         elif (isinstance(lval,str) and isnumber(rval)):
             strlen = len(lval)
-            chunkamt = int(math.floor(strlen / rval))
+            chunkamt = int(round(strlen / rval))
             res = list(chunkstring(str(lval), chunkamt))
             return res
         elif (isinstance(lval,str) and isinstance(rval,str)):
