@@ -11,14 +11,17 @@ def runscript(filename, verbose, args, tokens):
     if not filename.endswith(".wlw"):
         filename = filename + ".wlw"
     # open and read the file
-    f = open(filename, "U")
-    text = f.read()
-    # get the file location (so scripts can reference other files)
-    fileloc = os.path.dirname(os.path.realpath(f.name))
-    f.close()
-    # pass the file and the arguments to the lexer, pass that to the parser,
-    # and then pass that to the interpreter, and then interpret it!!
-    Interpreter(Parser(Lexer(text, verbose, tokens, filename))).interpret(args, fileloc)
+    try:
+        f = open(filename, "U")
+        text = f.read()
+        # get the file location (so scripts can reference other files)
+        fileloc = os.path.dirname(os.path.realpath(f.name))
+        f.close()
+        # pass the file and the arguments to the lexer, pass that to the parser,
+        # and then pass that to the interpreter, and then interpret it!!
+        Interpreter(Parser(Lexer(text, verbose, tokens, filename))).interpret(args, fileloc)
+    except IOError as e:
+        print "Error: file " + filename + " not found."
 
 
 if __name__ == "__main__":
