@@ -22,6 +22,10 @@ def islist(s):
     except (ValueError, TypeError) as e:
         return False
 
+# useful to break a string into bits for string division
+def chunkstring(string, length):
+    return (string[0+i:length+i] for i in range(0, len(string), length))
+
 
 class Interpreter(NodeVisitor):
     def __init__(self, parser):
@@ -288,6 +292,36 @@ class Interpreter(NodeVisitor):
             res =  lval * int(rval)
             return res
 
+    # handle division
+    def dodiv(self, lval, rval):
+        #float division
+        if isnumber(lval) and isnumber(rval):
+            res = lval/rval
+            return res
+        #array/float division
+        elif isnumber(lval) and isinstance(rval,list):
+            res = list(rval)
+            for i in rval:
+                res[rval.index(i)] = lval / res[rval.index(i)]
+            return res
+        elif  (isinstance(lval, list) and isnumber(rval)):
+            res = list(lval)
+            for i in lval:
+                res[lval.index(i)] = res[lval.index(i)] / rval
+            return res
+        #subdivide a string;
+        elif (isinstance(lval,str) and isnumber(rval)):
+            strlen = len(lval)
+            chunkamt = int(math.floor(strlen / rval))
+            res = list(chunkstring(str(lval), chunkamt))
+            return res
+        #uhh you shouldn't divide by a string so let's return 0
+        elif (isinstance(rval),str):
+            return 0
+        #hope we don't get here lol
+        else:
+            return lval/rval;
+
     # visit a binary operator
     def visit_BinOp(self, node):
         res = 0
@@ -307,7 +341,7 @@ class Interpreter(NodeVisitor):
         elif node.op.type == MUL:
             res = self.domult(node.left, node.right)
         elif node.op.type == DIV:
-            res =  self.visit(node.left) / self.visit(node.right)
+            res = self.dodiv(self.visit(node.left), self.visit(node.right))
         elif node.op.type == EXPONENT:
             res =  pow(self.visit(node.left),self.visit(node.right))
         # get the value at an index of an array

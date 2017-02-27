@@ -62,7 +62,7 @@ class Lexer(object):
     def skip_comment(self):
         while self.current_char != '#':
             if self.current_char == '\n':
-                if self.verbose: print "found a newline!"
+                #if self.verbose: print "found a newline!"
                 self.linecount += 1
             self.advance()
         self.advance()
@@ -71,7 +71,7 @@ class Lexer(object):
     def skip_whitespace(self):
         while self.current_char is not None and self.current_char.isspace():
             if self.current_char == '\n':
-                if self.verbose: print "found a newline!"
+                #if self.verbose: print "found a newline!"
                 self.linecount += 1
             self.advance()
 
@@ -163,7 +163,7 @@ class Lexer(object):
             # handle whitespace skipping
             if self.current_char.isspace():
                 if self.current_char == '\n':
-                    if self.verbose: print "found a newline!"
+                    #if self.verbose: print "found a newline!"
                     self.linecount += 1
                 self.skip_whitespace()
                 continue
