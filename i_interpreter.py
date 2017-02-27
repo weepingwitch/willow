@@ -244,8 +244,8 @@ class Interpreter(NodeVisitor):
 
     # handle conconatinating two things
     def doconcat(self, left, right):
-        lval = self.visit(left)
-        rval = self.visit(right)
+        lval = left
+        rval = right
         #concat two numbers - 3 + 5 = 35
         if (isnumber(lval) and isnumber(rval)):
             return str(lval) + str(rval)
@@ -268,8 +268,8 @@ class Interpreter(NodeVisitor):
 
     # handle multiplication
     def domult(self, left, right):
-        lval = self.visit(left)
-        rval = self.visit(right)
+        lval = left
+        rval = right
         # normal multiplication
         if isnumber(lval) and isnumber(rval):
             return lval * rval
@@ -277,12 +277,12 @@ class Interpreter(NodeVisitor):
         elif (isnumber(lval) and isinstance(rval, list)):
             res = list(rval)
             for i in rval:
-                res[rval.index(i)] = res[rval.index(i)] * lval
+                res[rval.index(i)] = self.domult(res[rval.index(i)], lval)
             return res
         elif  (isinstance(lval, list) and isnumber(rval)):
             res = list(lval);
             for i in lval:
-                res[lval.index(i)] = res[lval.index(i)] * rval
+                res[lval.index(i)] = self.domult(res[lval.index(i)],rval)
             return res
         # multiply by a string i guess
         elif isnumber(lval):
@@ -315,6 +315,9 @@ class Interpreter(NodeVisitor):
             chunkamt = int(math.floor(strlen / rval))
             res = list(chunkstring(str(lval), chunkamt))
             return res
+        elif (isinstance(lval,str) and isinstance(rval,str)):
+            res = str(lval.split(rval))
+            return res
         #uhh you shouldn't divide by a string so let's return 0
         elif (isinstance(rval),str):
             return 0
@@ -330,7 +333,7 @@ class Interpreter(NodeVisitor):
         if node.op.type == PLUS:
             res = self.doadd(self.visit(node.left), self.visit(node.right))
         elif node.op.type == CONCAT:
-            res = self.doconcat(node.left, node.right)
+            res = self.doconcat(self.visit(node.left), self.visit(node.right))
         # call another function
         elif node.op.type == CALL:
             if self.verbose: print "interpreting a call " + str(node.left)
@@ -339,7 +342,7 @@ class Interpreter(NodeVisitor):
         elif node.op.type == MINUS:
             res = self.dosubtract(self.visit(node.left), self.visit(node.right))
         elif node.op.type == MUL:
-            res = self.domult(node.left, node.right)
+            res = self.domult(self.visit(node.left),self.visit( node.right))
         elif node.op.type == DIV:
             res = self.dodiv(self.visit(node.left), self.visit(node.right))
         elif node.op.type == EXPONENT:
@@ -499,6 +502,10 @@ class Interpreter(NodeVisitor):
         self.funcs = funcs
         if self.verbose: print funcs;
         if funcs is None:
+            print "Error: No functions found in file."
+            return 0
+        if "main" not in funcs:
+            print "Error: No main function found in file."
             return 0
         if self.verbose: print "storing " + str(args) + " in " + str(funcs['main'])
         # put command line args as the argv for main

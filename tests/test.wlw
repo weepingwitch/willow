@@ -4,6 +4,8 @@ fun teststrings
   #A basic Hello World#
   mystring = "Hello World";
   print mystring;
+  mystring2 = mystring / "l"; #string splitting!#
+  print mystring2; #should print ['He', '', 'o Wor', 'd']#
   print mystring[6]; #should print "W"#
   mystring[6] = "B"; #wow you can assign to parts of a string!#
   print mystring; #should print "Hello Borld"#

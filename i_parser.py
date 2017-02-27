@@ -18,7 +18,8 @@ class Parser(object):
 
     # again, note to self, do error handling at some point in the future
     def error(self, errortext):
-        raise Exception("Invalid syntax: " + errortext)
+        print "Error: " + errortext
+        return 0
 
     # "eat" a token (verify it matches the expected token, and move on to the next)
     def eat(self, token_type):
@@ -28,7 +29,7 @@ class Parser(object):
             # tokentext tracks all parsed tokens, for debugging
             self.tokentext += str(self.current_token.value)
         else:
-            self.error("line " + self.current_token.linecount + ": expecting " + token_type + " got " + str(self.current_token))
+            self.error("line " + str(self.current_token.linecount) + ": expecting " + token_type + " got " + str(self.current_token))
 
     # create a dictionary of all of the functions in a program
     def parsefunctions(self):
@@ -357,7 +358,7 @@ class Parser(object):
         functions = self.parsefunctions()
         # make sure we reach the end of the file
         if self.current_token.type != EOF and self.current_token.type != SEMI:
-            self.error("EOF expected: " + str(self.current_token))
+            self.error("line " + str(self.current_token.linecount) + ": EOF expected, instead found: " + str(self.current_token))
         if self.tokens:
             print self.tokentext
             print

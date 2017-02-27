@@ -38,7 +38,8 @@ class Lexer(object):
 
     # maybe some day i'll add in real error handling lol lol
     def error(self, errortext):
-        raise Exception("Invalid character: " + errortext)
+        print "Invalid character: " + errortext
+        return 0
 
     # peek ahead at the next character
     # useful for determining what comes next
@@ -60,10 +61,10 @@ class Lexer(object):
     # skip over anything until you get to another pound sign
     # yay block comments
     def skip_comment(self):
-        while self.current_char != '#':
-            if self.current_char == '\n':
+        while self.current_char is not None and self.current_char != '#':
+            #if self.current_char == '\n':
                 #if self.verbose: print "found a newline!"
-                self.linecount += 1
+            #    self.linecount += 1
             self.advance()
         self.advance()
 
@@ -71,7 +72,7 @@ class Lexer(object):
     def skip_whitespace(self):
         while self.current_char is not None and self.current_char.isspace():
             if self.current_char == '\n':
-                #if self.verbose: print "found a newline!"
+                if self.verbose: print "found a newline!"
                 self.linecount += 1
             self.advance()
 
@@ -162,9 +163,11 @@ class Lexer(object):
                 continue
             # handle whitespace skipping
             if self.current_char.isspace():
-                if self.current_char == '\n':
+
+
+                #if self.current_char == '\n':
                     #if self.verbose: print "found a newline!"
-                    self.linecount += 1
+                #    self.linecount += 1
                 self.skip_whitespace()
                 continue
             # scan brackets (for variable substitution in strings)
