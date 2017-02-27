@@ -192,3 +192,7 @@ the above code will write the text “hello filesystem!” to the file myfile.tx
 you can generate random floats by calling random(max_number) which will generate a float between 0 and max_number
 
 see an example of this in action at [tests/guessinggame.wlw](https://github.com/weepingwitch/willow/blob/master/tests/guessinggame.wlw)
+
+## error handling:
+
+willow now supports basic error handling! i'm still working on catching every possible error, but right now some of the basic errors should generate an error message with an accompanying line number reference yay!
