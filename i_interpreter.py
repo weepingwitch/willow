@@ -302,12 +302,12 @@ class Interpreter(NodeVisitor):
         elif isnumber(lval) and isinstance(rval,list):
             res = list(rval)
             for i in rval:
-                res[rval.index(i)] = lval / res[rval.index(i)]
+                res[rval.index(i)] = self.dodiv(lval,res[rval.index(i)])
             return res
         elif  (isinstance(lval, list) and isnumber(rval)):
             res = list(lval)
             for i in lval:
-                res[lval.index(i)] = res[lval.index(i)] / rval
+                res[lval.index(i)] = self.dodiv(res[lval.index(i)], rval)
             return res
         #subdivide a string;
         elif (isinstance(lval,str) and isnumber(rval)):
@@ -511,4 +511,5 @@ class Interpreter(NodeVisitor):
         # put command line args as the argv for main
         self.funcargs[funcs['main']] = args
         # visit the main function
-        self.dofunc('main', args)
+        if not self.parser.tokens:
+            self.dofunc('main', args)

@@ -360,6 +360,7 @@ class Parser(object):
         if self.current_token.type != EOF and self.current_token.type != SEMI:
             self.error("line " + str(self.current_token.linecount) + ": EOF expected, instead found: " + str(self.current_token))
         if self.tokens:
+            print 
             print self.tokentext
             print
         # return the functions to the interpreter
