@@ -319,7 +319,7 @@ class Interpreter(NodeVisitor):
             res = str(lval.split(rval))
             return res
         #uhh you shouldn't divide by a string so let's return 0
-        elif (isinstance(rval),str):
+        elif (isinstance(rval,str)):
             return 0
         #hope we don't get here lol
         else:
