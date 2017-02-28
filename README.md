@@ -187,6 +187,8 @@ print myresult;
 ```
 the above code will write the text “hello filesystem!” to the file myfile.txt (located in the same directory as the willow script that is being interpreted), then read in the text and print it out.
 
+you can also read from URLs using filein!
+
 ### random number generation:
 
 you can generate random floats by calling random(max_number) which will generate a float between 0 and max_number

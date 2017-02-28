@@ -1,6 +1,6 @@
 from i_parser import *
 from i_format_mapper import *
-import numbers, re, random, math
+import numbers, re, random, math, urllib2
 from string import Template
 
 # the interpreter navigates the AST by visiting each node and evaluating it
@@ -173,10 +173,15 @@ class Interpreter(NodeVisitor):
                 fname = self.vars[node.expr.value]
             if self.verbose: print self.fileloc
             if self.verbose: print fname
-            # find a file from the same directory
-            f = open( fname)
-            text = f.read()
-            f.close()
+            #handle a web file
+            if "http" in fname:
+                response = urllib2.urlopen(fname)
+                text = response.read()
+            else:
+                #open a local file
+                f = open( fname)
+                text = f.read()
+                f.close()
             # return the contents
             return text;
 
@@ -300,7 +305,7 @@ class Interpreter(NodeVisitor):
         #float division
         if isnumber(lval) and isnumber(rval):
             try:
-                res = lval/rval
+                res = float(lval)/float(rval)
                 return res
             except ZeroDivisionError:
                 return 0.0
@@ -319,6 +324,8 @@ class Interpreter(NodeVisitor):
         elif (isinstance(lval,str) and isnumber(rval)):
             strlen = len(lval)
             chunkamt = int(round(strlen / rval))
+            if (chunkamt <= 0):
+                chunkamt = 1;
             res = list(chunkstring(str(lval), chunkamt))
             return res
         elif (isinstance(lval,str) and isinstance(rval,str)):
@@ -326,7 +333,7 @@ class Interpreter(NodeVisitor):
             return res
         #uhh you shouldn't divide by a string so let's return 0
         elif (isinstance(rval,str)):
-            return 0
+            return 0.0
         #hope we don't get here lol
         else:
             return lval/rval;

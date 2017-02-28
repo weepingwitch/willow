@@ -97,6 +97,10 @@ fun testfileio
   print filename; #should print the path to myfile.txt in the same directory as this file#
   myresult = filein(filename);
   print myresult; #should print "hello filesystem!"#
+
+  urlname = "http://willow.lol/test.txt";
+  myresult = filein(urlname); #you can read from URLs too!#
+  print myresult; #should print "Hello Internet!"
 }
 
 #testing random number generation#
