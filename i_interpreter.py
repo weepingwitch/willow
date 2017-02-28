@@ -1,4 +1,5 @@
 from i_parser import *
+import ast;
 from i_format_mapper import *
 import numbers, re, random, math, urllib2
 from string import Template
@@ -88,6 +89,9 @@ class Interpreter(NodeVisitor):
                 self.vars[node.left.left.value] = myarr;
             # otherwise it's a regular array
             else:
+                if (int(aindex)>= len(myarr)):
+                    while len(myarr) <= int(aindex):
+                        myarr.extend([0.0])
                 myarr[int(aindex)] = val
         # otherwise, it's a regular assignment statement
         else:
@@ -133,8 +137,19 @@ class Interpreter(NodeVisitor):
             return node.expr;
         # compute the length of a string or array
         elif op == LEN:
-            res = float(len(self.visit(node.expr)))
-            return res
+            thing = self.visit(node.expr)
+            if (isinstance(thing,list)):
+                res = float(len(self.visit(node.expr)))
+                return res
+            elif (isinstance(thing, str)):
+                test = self.vars.get(node.expr.value)
+                if test != None:
+                    if test[0] == "[":
+                        thing = ast.literal_eval(test)
+                    else:
+                        thing = test;
+                res = float(len(thing));
+                return res
         # round down a float
         elif op == FLOOR:
             res = float(math.floor(self.visit(node.expr)))
@@ -168,7 +183,7 @@ class Interpreter(NodeVisitor):
         elif op == FILEIN:
             # check if file name is a variable
             if not isinstance(node.expr, Var):
-                fname = node.expr.value
+                fname = self.visit(node.expr)
             else:
                 fname = self.vars[node.expr.value]
             if self.verbose: print self.fileloc
@@ -243,7 +258,7 @@ class Interpreter(NodeVisitor):
             return res
         #do string subtraction
         elif (isinstance(lval, str) or isinstance(rval, str)):
-            res = str(str(lval).replace(str(rval),""))
+            res = str(str(lval).decode('string_escape').replace(str(rval).decode('string_escape'),""))
             return res
         # ehhh hopefully we don't get here
         else:
@@ -329,7 +344,10 @@ class Interpreter(NodeVisitor):
             res = list(chunkstring(str(lval), chunkamt))
             return res
         elif (isinstance(lval,str) and isinstance(rval,str)):
-            res = str(lval.split(rval))
+            if rval != "":
+                res = list(lval.decode('string_escape').split(rval.decode('string_escape')))
+            else:
+                res = lval
             return res
         #uhh you shouldn't divide by a string so let's return 0
         elif (isinstance(rval,str)):
@@ -463,10 +481,13 @@ class Interpreter(NodeVisitor):
         # evaluate any variables in the array
         for s in node.value:
             if isinstance(s,basestring):
-                res[node.value.index(s)] = format_map(s, self.vars)
-                var = res[node.value.index(s)]
-                if islist(var):
-                    res[node.value.index(s)] = var
+                try:
+                    res[node.value.index(s)] = format_map(s, self.vars)
+                    var = res[node.value.index(s)]
+                    if islist(var):
+                        res[node.value.index(s)] = var
+                except KeyError as e:
+                    return res;
         return res
 
     # code for calling another function

@@ -100,7 +100,7 @@ fun testfileio
 
   urlname = "http://willow.lol/test.txt";
   myresult = filein(urlname); #you can read from URLs too!#
-  print myresult; #should print "Hello Internet!"
+  print myresult; #should print "Hello Internet!"#
 }
 
 #testing random number generation#
