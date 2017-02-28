@@ -194,9 +194,12 @@ class Interpreter(NodeVisitor):
                 text = response.read()
             else:
                 #open a local file
-                f = open( fname)
-                text = f.read()
-                f.close()
+                try:
+                    f = open( fname)
+                    text = f.read()
+                    f.close()
+                except:
+                    text = 0.0;
             # return the contents
             return text;
 
@@ -380,16 +383,21 @@ class Interpreter(NodeVisitor):
             res =  pow(self.visit(node.left),self.visit(node.right))
         # get the value at an index of an array
         elif node.op.type == INDEX:
-            if self.verbose: print "trying to interpret an array index " + node.left.value + "[" + str(int(node.right)) + "]"
-            arr = self.visit_Var(node.left)
+            #if self.verbose: print "trying to interpret an array index " + node.left.value + "[" + str(int(node.right)) + "]"
+            arr = self.visit(node.left)
             if isnumber(node.right):
                 index = int(node.right)
             elif isinstance(node.right, str):
-                index = self.vars[node.right.token]
+                index = self.vars[node.right]
             # if the array isn't that long, return 0
-            if index>=len(arr):
-                res = 0
+            if arr == 0:
+                return 0.0;
+            if float(index) >= len(arr):
+                res = 0.0
             else:
+                # return the array item
+                if (isinstance(arr,unicode)):
+                    arr = ast.literal_eval(arr);
                 res = arr[int(index)]
         # evaluate conditionals
         elif node.op.type == EQUALS:
