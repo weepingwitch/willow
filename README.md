@@ -16,7 +16,7 @@ python willow.py source_code.wlw myarg1 myarg2
 ```
 
 ### using an executable
-i've tried to build some executables using pyinstaller - they're located in the [builds directory][https://github.com/weepingwitch/willow/tree/master/builds]. they might not work on every type of processor, so, uh, good luck. however, the executables can be run WITHOUT PYTHON BEING INSTALLED ON THE SYSTEM!!
+i've tried to build some executables using pyinstaller - they're located in the [builds directory](https://github.com/weepingwitch/willow/tree/master/builds). they might not work on every type of processor, so, uh, good luck. however, the executables can be run WITHOUT PYTHON BEING INSTALLED ON THE SYSTEM!!
 
 so yeah, first, add the directory containing the executable for your OS to your path, and then call like this:
 ```bash
