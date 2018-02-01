@@ -4,6 +4,7 @@ a (very simple) weakly-typed programming language / interpreter, built in python
 a language package to provide syntax highlighting for the atom text editor is available [here](https://github.com/weepingwitch/language-willow)
 
 ## usage
+### using python / source code
 regular usage:
 ```bash
 python willow.py source_code.wlw
@@ -12,6 +13,19 @@ python willow.py source_code.wlw
 passing in command-line arguments:
 ```bash
 python willow.py source_code.wlw myarg1 myarg2
+```
+
+### using an executable
+i've tried to build some executables using pyinstaller - they're located in the [builds directory][https://github.com/weepingwitch/willow/tree/master/builds]. they might not work on every type of processor, so, uh, good luck. however, the executables can be run WITHOUT PYTHON BEING INSTALLED ON THE SYSTEM!!
+
+so yeah, first, add the directory containing the executable for your OS to your path, and then call like this:
+```bash
+willow source_code.wlw
+```
+
+passing in command-line arguments:
+```bash
+willow source_code.wlw myarg1 myarg2
 ```
 
 ## examples / test functions
