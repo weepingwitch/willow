@@ -27,6 +27,15 @@ fun main{
   adding 0 to treat it as a float,
   since it's read in from command line as string#
   num = argv[0] + 0;
-  fact = call(factorial)(num);
-  print "the factorial of " + num + " is " + fact;
+  numtest = num * 0;
+  if (numtest != 0)
+  then{
+    print "that's not a number?";
+  }
+  else{
+    fact = call(factorial)(num);
+    print "the factorial of " + num + " is " + fact;
+  }
+
+
 }
